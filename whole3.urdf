@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot name="whole3">
+
+  <!-- Materials -->
+  <material name="blue">
+    <color rgba="0 0.4 0.8 1"/>
+  </material>
+  <material name="purple">
+    <color rgba="0.5 0.2 0.5 1"/>
+  </material>
+  <material name="green">
+    <color rgba="0 0.6 0.3 1"/>
+  </material>
+  <material name="yellow">
+    <color rgba="1 0.8 0.4 1"/>
+  </material>
+  <material name="white">
+    <color rgba="0.8 1 1 1"/>
+  </material>
+
+  <link name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.12811 0.024461 -0.0044622"
+        rpy="0 0 0" />
+      <mass value="2.4" />
+      <inertia
+        ixx="0.001161"
+        ixy="4.7216E-06"
+        ixz="4.9666E-05"
+        iyy="0.003507"
+        iyz="8.7588E-06"
+        izz="0.0043338" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://whole3/meshes/base_link.STL" />
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://whole3/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="shoulder1">
+    <inertial>
+      <origin
+        xyz="-0.019988 0.011936 -0.04778"
+        rpy="0 0 0" />
+      <mass
+        value="0.1" />
+      <inertia
+        ixx="1.2507E-05"
+        ixy="3.8607E-11"
+        ixz="-1.1777E-10"
+        iyy="1.1715E-05"
+        iyz="2.2809E-07"
+        izz="7.9602E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/shoulder1.STL" />
+      </geometry>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/shoulder1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="body_to_shoulder_1" type="revolute">
+    <origin
+      xyz="-0.01175 0.085486 -0.0151"
+      rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="shoulder1" />
+    <axis xyz="-1 0 0" />
+    <limit effort="1.5" lower="1.08" upper="-1.9" velocity="5.8"/>
+  </joint>
+  <link name="upper1">
+    <inertial>
+      <origin
+        xyz="0.0746587924570855 -0.0195022828818725 0.00274193692122332"
+        rpy="0 0 0" />
+      <mass
+        value="0.2" />
+      <inertia
+        ixx="2.32575759335115E-05"
+        ixy="-4.42904149223622E-07"
+        ixz="2.42868778919189E-07"
+        iyy="3.34285204091329E-05"
+        iyz="-1.50607707657166E-08"
+        izz="3.51562967381548E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/upper1.STL" />
+      </geometry>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/upper1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="shoulder_to_upper_1" type="revolute">
+    <origin
+      xyz="-0.019986 0.033028 -0.067039"
+      rpy="3.1416 -0.011248 -3.1416" />
+    <parent link="shoulder1" />
+    <child link="upper1" />
+    <axis xyz="0 1 0" />
+    <limit effort="1.5" lower="0.05" upper="-3.19" velocity="5.8"/>
+  </joint>
+  <link name="lower1">
+    <inertial>
+      <origin
+        xyz="0.0602140846319608 -0.0208912726901844 0.000838226306676529"
+        rpy="0 0 0" />
+      <mass
+        value="0.3" />
+      <inertia
+        ixx="8.44391394980476E-06"
+        ixy="-6.86193535685136E-09"
+        ixz="1.34754783841537E-08"
+        iyy="1.55986002096454E-05"
+        iyz="-8.55304098100674E-12"
+        izz="1.79230959202609E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/lower1.STL" />
+      </geometry>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/lower1.STL" />
+      </geometry>
+      <contact_coefficients mu="1000" kp="1.0" kd="1.0" />
+    </collision>
+  </link>
+  <joint name="upper_to_lower_1" type="revolute">
+    <origin
+      xyz="0.098736 0.00026 0.021"
+      rpy="3.1416 -0.25163 3.1416" />
+    <parent link="upper1" />
+    <child link="lower1" />
+    <axis xyz="0 1 0" />
+    <limit effort="1.5" lower="0" upper="2.85" velocity="5.8"/>
+  </joint>
+  <link name="shoulder2">
+    <inertial>
+      <origin
+        xyz="-0.0199883335352346 -0.0123395397543914 -0.0477795547280775"
+        rpy="0 0 0" />
+      <mass
+        value="0.1" />
+      <inertia
+        ixx="1.25066053342586E-05"
+        ixy="3.86073162150678E-11"
+        ixz="-1.1777008509794E-10"
+        iyy="1.17149211191126E-05"
+        iyz="-2.38242413242283E-07"
+        izz="7.96022008945769E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/shoulder2.STL" />
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/shoulder2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="body_to_shoulder_2" type="revolute">
+    <origin
+      xyz="-0.0125 -0.035486 -0.0151"
+      rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="shoulder2" />
+    <axis xyz="-1 0 0" />
+    <limit effort="1.5" lower="-1.08" upper="1.9" velocity="5.8"/>
+  </joint>
+  <link name="upper2">
+    <inertial>
+      <origin
+        xyz="0.0746587899501843 0.020497703718627 0.00274193937211331"
+        rpy="0 0 0" />
+      <mass
+        value="0.15" />
+      <inertia
+        ixx="2.32575759335115E-05"
+        ixy="-4.42904149223639E-07"
+        ixz="2.42868778919219E-07"
+        iyy="3.34285204091328E-05"
+        iyz="-1.50607707657213E-08"
+        izz="3.51562967381547E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/upper2.STL" />
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/upper2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="shoulder_to_upper_2" type="revolute">
+    <origin
+      xyz="-0.019986 -0.033028 -0.067039"
+      rpy="-3.1416 -0.011248 -3.1416" />
+    <parent link="shoulder2" />
+    <child link="upper2" />
+    <axis xyz="0 1 0" />
+    <limit effort="1.5" lower="0.05" upper="-3.19" velocity="5.8"/>
+  </joint>
+  <link name="lower2">
+    <inertial>
+      <origin
+        xyz="0.060214083817717 0.0191087273681312 0.000838226739645953"
+        rpy="0 0 0" />
+      <mass
+        value="0.1" />
+      <inertia
+        ixx="8.4439140509301E-06"
+        ixy="-6.86200611540697E-09"
+        ixz="1.34755261240091E-08"
+        iyy="1.55986003171046E-05"
+        iyz="-8.50435883479419E-12"
+        izz="1.79230960660323E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/lower2.STL" />
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/lower2.STL" />
+      </geometry>
+      <contact_coefficients mu="1000" kp="1.0" kd="1.0" />
+    </collision>
+  </link>
+  <joint name="upper_to_lower_2" type="revolute">
+    <origin
+      xyz="0.098736 0.00025999 0.021"
+      rpy="3.1416 -0.25163 3.1416" />
+    <parent link="upper2" />
+    <child link="lower2" />
+    <axis xyz="0 1 0" />
+    <limit effort="1.5" lower="0" upper="2.88" velocity="5.8"/>
+  </joint>
+  <link name="shoulder3">
+    <inertial>
+      <origin
+        xyz="-0.0199883331725058 0.0119363154368039 -0.0477795550908057"
+        rpy="0 0 0" />
+      <mass
+        value="0.1" />
+      <inertia
+        ixx="1.25066053342585E-05"
+        ixy="3.86073162121563E-11"
+        ixz="-1.17770085110188E-10"
+        iyy="1.17149211191126E-05"
+        iyz="2.28085811788431E-07"
+        izz="7.9602200894577E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/shoulder3.STL" />
+      </geometry>
+      <material name="yellow"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/shoulder3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="body_to_shoulder_3" type="revolute">
+    <origin
+      xyz="-0.2085 0.085486 -0.0151"
+      rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="shoulder3" />
+    <axis xyz="-1 0 0" />
+    <limit effort="1.5" lower="1.08" upper="-1.9" velocity="5.8"/>
+  </joint>
+  <link name="upper3">
+    <inertial>
+      <origin
+        xyz="0.0746587951972182 -0.0195022828503965 0.00274193428315794"
+        rpy="0 0 0" />
+      <mass
+        value="0.15" />
+      <inertia
+        ixx="2.32575759335114E-05"
+        ixy="-4.42904149223603E-07"
+        ixz="2.42868778919201E-07"
+        iyy="3.34285204091327E-05"
+        iyz="-1.50607707656732E-08"
+        izz="3.51562967381547E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/upper3.STL" />
+      </geometry>
+      <material name="yellow"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/upper3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="shoulder_to_upper_3" type="revolute">
+    <origin
+      xyz="-0.019986 0.033028 -0.067039"
+      rpy="3.1416 -0.011248 -3.1416" />
+    <parent link="shoulder3" />
+    <child link="upper3" />
+    <axis xyz="0 1 0" />
+    <limit effort="1.5" lower="0.05" upper="-3.19" velocity="5.8"/>
+  </joint>
+  <link name="lower3">
+    <inertial>
+      <origin
+        xyz="0.0602140976936184 -0.0208912725640155 0.000838218057780227"
+        rpy="0 0 0" />
+      <mass
+        value="0.1" />
+      <inertia
+        ixx="8.4439139498048E-06"
+        ixy="-6.86193535687041E-09"
+        ixz="1.34754783841622E-08"
+        iyy="1.55986002096454E-05"
+        iyz="-8.55304096458999E-12"
+        izz="1.7923095920261E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/lower3.STL" />
+      </geometry>
+      <material name="yellow"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/lower3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="upper_to_lower_3" type="revolute">
+    <origin
+      xyz="0.098736 0.00026 0.021"
+      rpy="3.1416 -0.25163 3.1416" />
+    <parent link="upper3" />
+    <child link="lower3" />
+    <axis xyz="0 1 0" />
+    <limit effort="1.5" lower="0" upper="2.88" velocity="5.8"/>
+  </joint>
+  <link name="shoulder4">
+    <inertial>
+      <origin
+        xyz="-0.0199883335352347 -0.0123395397543913 -0.0477795547280775"
+        rpy="0 0 0" />
+      <mass
+        value="0.1" />
+      <inertia
+        ixx="1.25066053342586E-05"
+        ixy="3.8607316230764E-11"
+        ixz="-1.17770085085654E-10"
+        iyy="1.17149211191127E-05"
+        iyz="-2.38242413242333E-07"
+        izz="7.9602200894577E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/shoulder4.STL" />
+      </geometry>
+      <material name="purple"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/shoulder4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="body_to_shoulder_4" type="revolute">
+    <origin
+      xyz="-0.20925 -0.035486 -0.0151"
+      rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="shoulder4" />
+    <axis xyz="-1 0 0" />
+    <limit effort="1.5" lower="-1.08" upper="1.9" velocity="5.8"/>
+  </joint>
+  <link name="upper4">
+    <inertial>
+      <origin
+        xyz="-0.0746587974571581 -0.0204977173746176 0.00274193205984304"
+        rpy="0 0 0" />
+      <mass
+        value="0.15" />
+      <inertia
+        ixx="2.32575759335113E-05"
+        ixy="-4.42904149223597E-07"
+        ixz="-2.42868778919201E-07"
+        iyy="3.34285204091327E-05"
+        iyz="1.50607707657084E-08"
+        izz="3.51562967381545E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/upper4.STL" />
+      </geometry>
+      <material name="purple"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/upper4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="shoulder_to_upper_4" type="revolute">
+    <origin
+      xyz="-0.019986 -0.033028 -0.067039"
+      rpy="-3.1416 0.011248 0" />
+    <parent link="shoulder4" />
+    <child link="upper4" />
+    <axis xyz="0 -1 0" />
+    <limit effort="1.5" lower="0.05" upper="-3.19" velocity="5.8"/>
+  </joint>
+  <link name="lower4">
+    <inertial>
+      <origin
+        xyz="0.0602140940368519 0.0191087262388353 0.000838220736575884"
+        rpy="0 0 0" />
+      <mass
+        value="0.1" />
+      <inertia
+        ixx="8.44391394980472E-06"
+        ixy="-6.86193535686824E-09"
+        ixz="1.34754783841476E-08"
+        iyy="1.55986002096453E-05"
+        iyz="-8.55304098342763E-12"
+        izz="1.79230959202609E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/lower4.STL" />
+      </geometry>
+      <material name="purple"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://whole3/meshes/lower4.STL" />
+      </geometry>
+      <contact_coefficients mu="1.0" kp="1.0" kd="1.0" />
+    </collision>
+  </link>
+  <joint name="upper_to_lower_4" type="revolute">
+    <origin
+      xyz="-0.098736 -0.00026 0.021"
+      rpy="3.1416 -0.25163 0" />
+    <parent link="upper4" />
+    <child link="lower4" />
+    <axis xyz="0 1 0" />
+    <limit effort="1.5" lower="0" upper="2.88" velocity="5.8"/>
+  </joint>
+</robot>
