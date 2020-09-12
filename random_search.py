@@ -2,59 +2,12 @@ import pybullet as p
 import time
 import pybullet_data
 import math
-import csv
 import random
 import numpy as np
+import json
 
-def stand(boxId):
-	# Change to vector later
-	# Put in the handtuned_gait utils later 
-	targetPos1 = - 30 / 180 * math.pi
-	targetPos2 = 45 / 180 * math.pi
-	p.setJointMotorControl2(bodyUniqueId=boxId,
-	                  jointIndex=1,
-                      controlMode=p.POSITION_CONTROL,
-                      targetPosition = targetPos1,
-                      force = maxForce)
 
-	p.setJointMotorControl2(bodyUniqueId=boxId,
-	                  jointIndex=2,
-                      controlMode=p.POSITION_CONTROL,
-                      targetPosition = targetPos2,
-                      force = maxForce)
-
-	p.setJointMotorControl2(bodyUniqueId=boxId,
-	                  jointIndex=4,
-                      controlMode=p.POSITION_CONTROL,
-                      targetPosition = targetPos1,
-                      force = maxForce)
-	p.setJointMotorControl2(bodyUniqueId=boxId,
-	                  jointIndex=5,
-                      controlMode=p.POSITION_CONTROL,
-                      targetPosition = targetPos2,
-                      force = maxForce)
-	p.setJointMotorControl2(bodyUniqueId=boxId,
-	                  jointIndex=7,
-                      controlMode=p.POSITION_CONTROL,
-                      targetPosition = targetPos1,
-                      force = maxForce)
-	p.setJointMotorControl2(bodyUniqueId=boxId,
-	                  jointIndex=8,
-                      controlMode=p.POSITION_CONTROL,
-                      targetPosition = targetPos2,
-                      force = maxForce)
-	p.setJointMotorControl2(bodyUniqueId=boxId,
-	                  jointIndex=10,
-                      controlMode=p.POSITION_CONTROL,
-                      targetPosition = targetPos1,
-                      force = maxForce)
-	p.setJointMotorControl2(bodyUniqueId=boxId,
-	                  jointIndex=11,
-                      controlMode=p.POSITION_CONTROL,
-                      targetPosition = targetPos2,
-                      force = maxForce)
-
-def random_search(robot_urdf, epochs, iterations, output_path, maxForce=500, show_best=False):
+def random_search(robot_urdf, epochs, iterations, output_path, maxForce=500):
 	'''
 		Random Search for parameters of sin function 
 		of the shoulder and ankle joints of the robot
@@ -176,76 +129,132 @@ def random_search(robot_urdf, epochs, iterations, output_path, maxForce=500, sho
 	p.disconnect()
 
 
-	if show_best:
-		# Make this a function later
-		physicsClient = p.connect(p.GUI)
-		p.setAdditionalSearchPath(pybullet_data.getDataPath()) #optionally
-		p.setGravity(0, 0, -10)
-		planeId = p.loadURDF("plane.urdf")
-		cubeStartPos = [0, 0, 0.2]
-		cubeStartOrientation = p.getQuaternionFromEuler([0, 0, 0])
-		a_s = best_params['a_s']
-		b_s = best_params['b_s']
-		w_s = w_s
-		c_s = [best_params['c_s_1'], best_params['c_s_2'], best_params['c_s_3'], best_params['c_s_4']]
-		a_a = best_params['a_a']
-		b_a = best_params['b_a']
-		w_a = w_a
-		c_a = [best_params['c_a_1'], best_params['c_a_2'], best_params['c_a_3'], best_params['c_a_4']]
-
-		# a_s = -0.873
-		# b_s = -0.402
-		# w_s = 0.05	
-		# c_s = [-7.348, -7.06, -4.2, -4.955]
-		# a_a = 0.83
-		# b_a = 0.485
-		# w_a = 0.05
-		# c_a = [15.58, 0.77, -6.47, -12.94]
-		boxId = p.loadURDF(robot_urdf, cubeStartPos, cubeStartOrientation)
-		start_x = p.getBasePositionAndOrientation(boxId)[0][0]
-		# print('Start at: ', start_x)
-
-		### Get the robot move for a certain period of time
-		for i in range (1000):
-			############# Stand ###############	
-			stand(boxId)
-
-			if (i >= 150):
-				for j, joint_index in enumerate(joint_indices_s):
-					targetPos = a_s + b_s * math.sin(w_s * (i - 150) + c_s[j])
-					p.setJointMotorControl2(boxId, joint_index, controlMode=p.POSITION_CONTROL, 
-							targetPosition= targetPos)
-				for j, joint_index in enumerate(joint_indices_a):
-					targetPos = a_a + b_a * math.sin(w_a * (i - 150) + c_a[j])
-					p.setJointMotorControl2(boxId, joint_index, controlMode=p.POSITION_CONTROL, 
-							targetPosition= targetPos)
-							
-			p.stepSimulation()
-			time.sleep(1./240.)
-		p.disconnect()
+	
 
 	# find a better way of savinf the data. maybe json or sql
-	with open(output_path, 'w', newline='') as csvfile:
-		writer = csv.writer(csvfile)
-		writer.writerow(['max_distance_list'] + max_distance_list)
-		writer.writerow(['max_distance', max_distance])
+	# with open(output_path, 'w', newline='') as csvfile:
+	# 	writer = csv.writer(csvfile)
+	# 	writer.writerow(['max_distance_list'] + max_distance_list)
+	# 	writer.writerow(['max_distance', max_distance])
 
-		for key, value in best_params.items():
-			writer.writerow([key, value])
+	# 	for key, value in best_params.items():
+	# 		writer.writerow([key, value])
 
-	return best_params
+	with open(output_path, 'w') as outfile:
+		outfile.write(json.dumps(best_params, indent=4, sort_keys=True))
 
 
+def stand(boxId):
+	# Change to vector later
+	# Put in the handtuned_gait utils later 
+	targetPos1 = - 30 / 180 * math.pi
+	targetPos2 = 45 / 180 * math.pi
+	p.setJointMotorControl2(bodyUniqueId=boxId,
+	                  jointIndex=1,
+                      controlMode=p.POSITION_CONTROL,
+                      targetPosition = targetPos1,
+                      force = maxForce)
+
+	p.setJointMotorControl2(bodyUniqueId=boxId,
+	                  jointIndex=2,
+                      controlMode=p.POSITION_CONTROL,
+                      targetPosition = targetPos2,
+                      force = maxForce)
+
+	p.setJointMotorControl2(bodyUniqueId=boxId,
+	                  jointIndex=4,
+                      controlMode=p.POSITION_CONTROL,
+                      targetPosition = targetPos1,
+                      force = maxForce)
+	p.setJointMotorControl2(bodyUniqueId=boxId,
+	                  jointIndex=5,
+                      controlMode=p.POSITION_CONTROL,
+                      targetPosition = targetPos2,
+                      force = maxForce)
+	p.setJointMotorControl2(bodyUniqueId=boxId,
+	                  jointIndex=7,
+                      controlMode=p.POSITION_CONTROL,
+                      targetPosition = targetPos1,
+                      force = maxForce)
+	p.setJointMotorControl2(bodyUniqueId=boxId,
+	                  jointIndex=8,
+                      controlMode=p.POSITION_CONTROL,
+                      targetPosition = targetPos2,
+                      force = maxForce)
+	p.setJointMotorControl2(bodyUniqueId=boxId,
+	                  jointIndex=10,
+                      controlMode=p.POSITION_CONTROL,
+                      targetPosition = targetPos1,
+                      force = maxForce)
+	p.setJointMotorControl2(bodyUniqueId=boxId,
+	                  jointIndex=11,
+                      controlMode=p.POSITION_CONTROL,
+                      targetPosition = targetPos2,
+                      force = maxForce)
+
+
+# This function should probably be a independent file
+def show_best(robot_urdf, params_file, iterations, maxForce=500):
+	'''
+		Animate how the robot move under the params
+		with pybullet GUI
+	'''
+
+	physicsClient = p.connect(p.GUI)
+	p.setAdditionalSearchPath(pybullet_data.getDataPath()) #optionally
+	p.setGravity(0, 0, -10)
+	planeId = p.loadURDF("plane.urdf")
+	cubeStartPos = [0, 0, 0.2]
+	cubeStartOrientation = p.getQuaternionFromEuler([0, 0, 0])
+	
+	# Load the robot model
+	boxId = p.loadURDF(robot_urdf, cubeStartPos, cubeStartOrientation)
+	start_x = p.getBasePositionAndOrientation(boxId)[0][0]
+
+	# Load the parameters saved
+	with open(params_file, 'r') as read_file:
+		best_params = json.load(read_file)
+
+	a_s = best_params['a_s']
+	b_s = best_params['b_s']
+	w_s = 0.05
+	c_s = [best_params['c_s_1'], best_params['c_s_2'], best_params['c_s_3'], best_params['c_s_4']]
+	a_a = best_params['a_a']
+	b_a = best_params['b_a']
+	w_a = 0.05
+	c_a = [best_params['c_a_1'], best_params['c_a_2'], best_params['c_a_3'], best_params['c_a_4']]
+	joint_indices_s = [1, 4, 7, 10]
+	joint_indices_a = [2, 5, 8, 11]
+
+	### Get the robot move for a certain period of time
+	for i in range(iterations):
+		############# Stand ###############	
+		stand(boxId)
+
+		if (i >= 150):
+			for j, joint_index in enumerate(joint_indices_s):
+				targetPos = a_s + b_s * math.sin(w_s * (i - 150) + c_s[j])
+				p.setJointMotorControl2(boxId, joint_index, controlMode=p.POSITION_CONTROL, 
+						targetPosition= targetPos)
+			for j, joint_index in enumerate(joint_indices_a):
+				targetPos = a_a + b_a * math.sin(w_a * (i - 150) + c_a[j])
+				p.setJointMotorControl2(boxId, joint_index, controlMode=p.POSITION_CONTROL, 
+						targetPosition= targetPos)
+						
+		p.stepSimulation()
+		time.sleep(1./240.)
+	p.disconnect()
 
 
 if __name__ == '__main__':
+
 	robot_urdf = "whole3.urdf"
-	epochs = 1 # epochs for Searching
+	epochs = 100 # epochs for Searching
 	iterations = 1000 # iterations (time) of each epoch
 	maxForce = 500 # joint maximum force
-	show_best = True # use GUI to animate how the robot move under the parameters searched
-	output_path = 'test.csv'
-	best_params = random_search(robot_urdf, epochs, iterations, output_path, maxForce, show_best)
+	output_path = 'random_search.json'	
+	random_search(robot_urdf, epochs, iterations, output_path, maxForce)
+	show_best(robot_urdf, output_path, iterations)
 
 
 
