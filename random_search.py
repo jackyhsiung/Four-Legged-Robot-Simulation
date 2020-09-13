@@ -5,14 +5,15 @@ import math
 import random
 import numpy as np
 import json
+from show_best import show_best
 
-
+# add plot max_distance
 def random_search(robot_urdf, epochs, iterations, output_path, maxForce=500):
 	'''
 		Random Search for parameters of sin function 
 		of the shoulder and ankle joints of the robot
 
-		Input Arguments
+		Input Parameters
 			epochs: epochs for Searching
 			iterations: iterations (time) of each epoch
 			maxForce: joint maximum force
@@ -74,7 +75,7 @@ def random_search(robot_urdf, epochs, iterations, output_path, maxForce=500):
 		for i in range(iterations):
 			
 			# Make the robot stand up before start running
-			stand(boxId)
+			stand(boxId, maxForce)
 			z = p.getBasePositionAndOrientation(boxId)[0][2]
 
 			# If the robot falls down, stop this epoch 
@@ -103,7 +104,7 @@ def random_search(robot_urdf, epochs, iterations, output_path, maxForce=500):
 		if fall:
 			distance = 0
 
-		print(f'Distance of iteration{iterations}: ', distance)
+		print(f'Distance of epoch{epoch}: ', distance)
 		if (distance > max_distance):
 			max_distance = distance
 			# best_params = c_s	
@@ -128,25 +129,14 @@ def random_search(robot_urdf, epochs, iterations, output_path, maxForce=500):
 	print('Max distance: ', max_distance)
 	p.disconnect()
 
-
-	
-
-	# find a better way of savinf the data. maybe json or sql
-	# with open(output_path, 'w', newline='') as csvfile:
-	# 	writer = csv.writer(csvfile)
-	# 	writer.writerow(['max_distance_list'] + max_distance_list)
-	# 	writer.writerow(['max_distance', max_distance])
-
-	# 	for key, value in best_params.items():
-	# 		writer.writerow([key, value])
-
 	with open(output_path, 'w') as outfile:
 		outfile.write(json.dumps(best_params, indent=4, sort_keys=True))
 
-
-def stand(boxId):
+# should make target_path a parameter
+def stand(boxId, maxForce):
 	# Change to vector later
-	# Put in the handtuned_gait utils later 
+	# Put in the handtuned_gait utils later
+	# should make target_path a parameter 
 	targetPos1 = - 30 / 180 * math.pi
 	targetPos2 = 45 / 180 * math.pi
 	p.setJointMotorControl2(bodyUniqueId=boxId,
@@ -193,62 +183,9 @@ def stand(boxId):
                       force = maxForce)
 
 
-# This function should probably be a independent file
-def show_best(robot_urdf, params_file, iterations, maxForce=500):
-	'''
-		Animate how the robot move under the params
-		with pybullet GUI
-	'''
-
-	physicsClient = p.connect(p.GUI)
-	p.setAdditionalSearchPath(pybullet_data.getDataPath()) #optionally
-	p.setGravity(0, 0, -10)
-	planeId = p.loadURDF("plane.urdf")
-	cubeStartPos = [0, 0, 0.2]
-	cubeStartOrientation = p.getQuaternionFromEuler([0, 0, 0])
-	
-	# Load the robot model
-	boxId = p.loadURDF(robot_urdf, cubeStartPos, cubeStartOrientation)
-	start_x = p.getBasePositionAndOrientation(boxId)[0][0]
-
-	# Load the parameters saved
-	with open(params_file, 'r') as read_file:
-		best_params = json.load(read_file)
-
-	a_s = best_params['a_s']
-	b_s = best_params['b_s']
-	w_s = 0.05
-	c_s = [best_params['c_s_1'], best_params['c_s_2'], best_params['c_s_3'], best_params['c_s_4']]
-	a_a = best_params['a_a']
-	b_a = best_params['b_a']
-	w_a = 0.05
-	c_a = [best_params['c_a_1'], best_params['c_a_2'], best_params['c_a_3'], best_params['c_a_4']]
-	joint_indices_s = [1, 4, 7, 10]
-	joint_indices_a = [2, 5, 8, 11]
-
-	### Get the robot move for a certain period of time
-	for i in range(iterations):
-		############# Stand ###############	
-		stand(boxId)
-
-		if (i >= 150):
-			for j, joint_index in enumerate(joint_indices_s):
-				targetPos = a_s + b_s * math.sin(w_s * (i - 150) + c_s[j])
-				p.setJointMotorControl2(boxId, joint_index, controlMode=p.POSITION_CONTROL, 
-						targetPosition= targetPos)
-			for j, joint_index in enumerate(joint_indices_a):
-				targetPos = a_a + b_a * math.sin(w_a * (i - 150) + c_a[j])
-				p.setJointMotorControl2(boxId, joint_index, controlMode=p.POSITION_CONTROL, 
-						targetPosition= targetPos)
-						
-		p.stepSimulation()
-		time.sleep(1./240.)
-	p.disconnect()
-
-
 if __name__ == '__main__':
 
-	robot_urdf = "whole3.urdf"
+	robot_urdf = 'whole3.urdf'
 	epochs = 100 # epochs for Searching
 	iterations = 1000 # iterations (time) of each epoch
 	maxForce = 500 # joint maximum force
