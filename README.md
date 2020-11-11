@@ -12,9 +12,6 @@ random_search.py and hill_climbing.py execute a random search and a hill climbin
 
 show_best.py use pybullet gui to show how the robot move in simulation
 
-# Code Example
-
 # Future Work
 All gaits are executed open-looped, in other words, the robot moves without any feedback. Therefore, we intend to add some sensors in the simulation that make the robot move better and capable of more task.
 
-# Credits
